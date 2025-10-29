@@ -1,0 +1,1 @@
+export { PasswordForgotPage as default } from '@pages/password-forgot';

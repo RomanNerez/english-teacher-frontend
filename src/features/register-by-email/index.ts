@@ -1,0 +1,1 @@
+export { RegisterByEmailCard } from './ui/register-by-email-card';
