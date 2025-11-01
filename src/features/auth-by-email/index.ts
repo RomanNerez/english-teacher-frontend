@@ -1,1 +1,0 @@
-export { AuthByEmailCard } from './ui/auth-by-email-card'

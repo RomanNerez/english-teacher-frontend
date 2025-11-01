@@ -57,13 +57,11 @@ export async function POST(req: Request) {
     return new Response(JSON.stringify(data), { status: res.status });
   }
 
-  // Получаем Set-Cookie из заголовка backend-а
   const setCookieHeader = res.headers.get("set-cookie");
   const cookieStore = await cookies();
 
  if (setCookieHeader) {
-    // Парсим refresh_token вручную
-    const refreshCookie = setCookieHeader.split(";")[0]; // refresh_token=xxxx
+    const refreshCookie = setCookieHeader.split(";")[0];
     const [name, value] = refreshCookie.split("=");
 
     cookieStore.set(name, value, {
@@ -71,18 +69,17 @@ export async function POST(req: Request) {
       sameSite: "lax",
       secure: process.env.NODE_ENV === "production",
       path: "/",
-      maxAge: 60 * 60 * 24 * 30, // пример: 30 дней
+      maxAge: 60 * 60 * 24 * 30,
     });
   }
 
-  // Теперь также сохраняем access_token в cookie
   if (data.data.access_token) {
     cookieStore.set("access_token", data.data.access_token, {
       httpOnly: true,
       sameSite: "lax",
       secure: process.env.NODE_ENV === "production",
       path: "/",
-      maxAge: 60 * 15, // 15 минут
+      maxAge: 60 * 15,
     });
   }
 

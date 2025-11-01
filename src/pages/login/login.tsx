@@ -1,10 +1,13 @@
+import { GuestGuard } from '@/src/features/guards';
 import { SimpleLayout } from '@/src/shared/ui/simple-layout';
-import { AuthByEmailCard } from '@/src/features/auth-by-email';
+import { AuthByEmailCard } from '@features/auth';
 
 export function LoginPage() {
-    return (
-        <SimpleLayout>
-            <AuthByEmailCard />
-        </SimpleLayout>
-    )
+  return (
+    <GuestGuard>
+      <SimpleLayout>
+        <AuthByEmailCard />
+      </SimpleLayout>
+    </GuestGuard>
+  );
 }
