@@ -18,18 +18,15 @@ export type TokenRemainingInfo = {
   formatted?: string;
 };
 
-function getRefreshTokenFromCookie(setCookieHeader: string | null) {    
-    if (!setCookieHeader) return;
-        
-    const refreshCookie = setCookieHeader.split(';')[0];
-    const [, value] = refreshCookie.split('=');
-    
-    return value;
+function getRefreshTokenFromCookie(setCookieHeader: string | null) {
+  if (!setCookieHeader) return;
+
+  const refreshCookie = setCookieHeader.split(';')[0];
+  const [, value] = refreshCookie.split('=');
+
+  return value;
 }
 
-/**
- * Возвращает сколько осталось времени до истечения JWT токена
- */
 export function getTokenRemainingTime(token: string): TokenRemainingInfo {
   try {
     const decoded = jwt.decode(token) as { exp?: number } | null;
@@ -42,7 +39,6 @@ export function getTokenRemainingTime(token: string): TokenRemainingInfo {
     const remainingMs = expiresAt.getTime() - now;
     const remainingSec = Math.floor(remainingMs / 1000);
 
-    // Форматируем для логов/отладки
     const minutes = Math.floor(remainingSec / 60);
     const seconds = remainingSec % 60;
 
@@ -55,13 +51,10 @@ export function getTokenRemainingTime(token: string): TokenRemainingInfo {
   }
 }
 
-/**
- * Получаем expiry из JWT access token
- */
 function getAccessTokenExpiry(accessToken: string): number | null {
   try {
     const decoded = jwt.decode(accessToken) as { exp?: number } | null;
-    // console.log({accessToken, decoded});
+
     return decoded?.exp ? decoded.exp * 1000 : null;
   } catch (err) {
     console.error("Invalid access token", err);
@@ -69,9 +62,6 @@ function getAccessTokenExpiry(accessToken: string): number | null {
   }
 }
 
-/**
- * Проверяем токены и при необходимости обновляем accessToken через backend
- */
 export async function checkAndRefreshTokens(currentTokens: Tokens): Promise<TokenCheckResult> {
   const { accessToken, refreshToken } = currentTokens;
 
@@ -92,14 +82,12 @@ export async function checkAndRefreshTokens(currentTokens: Tokens): Promise<Toke
     console.log("Невозможно определить срок жизни токена");
   }
 
-  // 1️⃣ Токен ещё валиден
   if (accessToken && accessTokenExpiry && Date.now() < accessTokenExpiry) {
     return { tokens: currentTokens, valid: true };
   }
 
   console.log('go to refresh')
 
-  // 2️⃣ Access token просрочен, пробуем refresh через backend
   if (!refreshToken) {
     return { tokens: currentTokens, valid: false, error: "No refresh token available" };
   }
@@ -129,7 +117,6 @@ export async function checkAndRefreshTokens(currentTokens: Tokens): Promise<Toke
   } catch (err) {
     console.log("Refresh token failed", err);
 
-    // 3️⃣ Если refresh не удался — возвращаем старые токены
     return { tokens: currentTokens, valid: false, error: "Tokens expired or invalid" };
   }
 }

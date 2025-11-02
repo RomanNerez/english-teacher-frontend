@@ -6,11 +6,11 @@ interface SimpleLayoutProps {
   children: ReactNode;
 }
 
-export const SimpleLayout = ({ children }: SimpleLayoutProps) => {
+export function SimpleLayout({ children }: SimpleLayoutProps) {
   return (
-    <Box display='flex' flex={'1 1 auto'} flexDirection="column" minHeight="100%">
+    <Box display='flex' flex={'1 1 auto'} flexDirection='column' minHeight='100%'>
       <Container
-        maxWidth="sm"
+        maxWidth='sm'
         sx={{ flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center' }}
       >
         {children}
@@ -18,4 +18,4 @@ export const SimpleLayout = ({ children }: SimpleLayoutProps) => {
       <Footer />
     </Box>
   );
-};
+}

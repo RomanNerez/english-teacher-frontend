@@ -14,9 +14,9 @@ export function AuthGuard({ children }: AuthGuardProps) {
   const router = useRouter();
 
   useEffect(() => {
-    if (isUnauthenticated()) {
-      router.replace('/login');
-    }
+    if (isLoading()) return;
+
+    if (isUnauthenticated()) router.replace('/login');
   }, [status, router]);
 
   if (isLoading()) {

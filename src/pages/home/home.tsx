@@ -1,10 +1,13 @@
 import { AuthGuard } from '@features/guards';
-import { Button } from '@shared/ui/button';
+import { StudentLayout } from '@/src/shared/ui/student-layout';
+import { ModuleList } from '@/src/features/modules';
 
 export async function HomePage() {
   return (
     <AuthGuard>
-      <Button variant='contained'>Hello world</Button>
+      <StudentLayout>
+        <ModuleList />
+      </StudentLayout>
     </AuthGuard>
   );
 }

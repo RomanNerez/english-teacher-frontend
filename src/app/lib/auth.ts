@@ -7,21 +7,8 @@ import NextAuth, { AuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { getServerSession } from "next-auth"
 import { checkAndRefreshTokens } from "./token-service";
-
-const getUser = async (accessToken: string) => {
-    const res = await fetch(`${process.env.BACKEND_URL}/api/v1/me`, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${accessToken}`,
-            'Accept': 'application/json',
-        },
-    });
-
-    const data = await res.json();
-
-    return data.data;
-}
+import { BackendService } from '@shared/api/backend';
+import { getCookieValue } from '@shared/lib/parse-cookie-from-set-cookie';
 
 export const authConfig = {
   providers: [
@@ -30,37 +17,39 @@ export const authConfig = {
       credentials: {
         email: { label: 'Email', type: 'email' },
         password: { label: 'Password', type: 'password' },
+        remember: { label: 'Password', type: 'checkbox' },
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials.password) return null;
-        
-        let jwtData = {};
 
-        const res = await fetch(`${process.env.BACKEND_URL}/api/v1/login`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            email: credentials.email,
-            password: credentials.password,
-          }),
+        let jwtData: { accessToken: string | null, refreshToken: string | null, user: any | null } = {
+          accessToken: null,
+          refreshToken: null,
+          user: null
+        };
+
+        const response = await BackendService.login<{ email: string, password: string, remember: boolean }>({
+          email: credentials.email,
+          password: credentials.password,
+          remember: credentials.remember === 'true'
         });
+        const { data } = response;
 
-        const setCookieHeader = res.headers.get('set-cookie');
-        
-         if (setCookieHeader) {
-            const refreshCookie = setCookieHeader.split(";")[0];
-            const [name, value] = refreshCookie.split("=");
-            jwtData.refreshToken = value;
-          }
-
-        const data = await res.json();
-
-        if (!res.ok || !data?.data.access_token) return null;
+        if (response.status !== 200) throw new Error(data.data.message);
 
         jwtData.accessToken = data.data.access_token;
+        jwtData.refreshToken = getCookieValue(response.headers['set-cookie'], 'refresh_token');
 
-        jwtData.user = await getUser(data.data.access_token);
-        
+        const meResponse = await BackendService.me(jwtData.accessToken || '');
+
+        if (meResponse.status !== 200) throw new Error(meResponse.data.message);
+
+        const { data: userData } = meResponse;
+
+        jwtData.user = userData.data;
+
+        console.log(jwtData);
+
         return jwtData;
       },
     }),
@@ -73,31 +62,31 @@ export const authConfig = {
   },
   callbacks: {
     async jwt({ token, user }) {
-        if (user) {
-          return {
-            user: user.user,
-            accessToken: user.accessToken,
-            refreshToken: user.refreshToken,
-            isValidBackendToken: true,
-          };
-        }
-
-        const {
-          tokens: { accessToken, refreshToken },
-          valid,
-          error,
-        } = await checkAndRefreshTokens({
-          accessToken: token.accessToken,
-          refreshToken: token.refreshToken,
-        });
-
+      if (user) {
         return {
-          user: token.user,
-          accessToken,
-          refreshToken,
-          isValidBackendToken: valid,
-          error,
+          user: user.user,
+          accessToken: user.accessToken,
+          refreshToken: user.refreshToken,
+          isValidBackendToken: true,
         };
+      }
+
+      const {
+        tokens: { accessToken, refreshToken },
+        valid,
+        error,
+      } = await checkAndRefreshTokens({
+        accessToken: token.accessToken,
+        refreshToken: token.refreshToken,
+      });
+
+      return {
+        user: token.user,
+        accessToken,
+        refreshToken,
+        isValidBackendToken: valid,
+        error,
+      };
     },
     async session({ session, token }) {
       return {

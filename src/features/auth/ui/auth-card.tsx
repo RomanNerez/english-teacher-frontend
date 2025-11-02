@@ -1,13 +1,17 @@
 import { Paper, Typography } from '@mui/material';
-import { AuthByEmailForm } from './auth-by-email-form';
 
-export function AuthByEmailCard() {
+type AuthCardProps = {
+  children: React.ReactNode;
+  title: string;
+};
+
+export function AuthCard({ children, title }: AuthCardProps) {
   return (
     <Paper elevation={3} sx={{ padding: 4, width: 350 }}>
       <Typography variant='h5' align='center' gutterBottom>
-        Вхід
+        {title}
       </Typography>
-      <AuthByEmailForm />
+      {children}
     </Paper>
   );
 }

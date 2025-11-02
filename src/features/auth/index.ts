@@ -1,1 +1,1 @@
-export { AuthByEmailCard } from './ui/auth-by-email-card';
+export { LoginForm } from './compose/login-form';

@@ -42,5 +42,13 @@ export default defineConfig([
       ],
     },
   },
+  {
+    files: ['*.ts', '*.tsx'],
+    rules: {
+      '@typescript-eslint/explicit-function-return-type': 'warn', // пример TS-правила
+      '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+      '@typescript-eslint/consistent-type-imports': 'error', // типы импортируем через import type
+    },
+  },
   globalIgnores(['.next/**', 'out/**', 'build/**', 'next-env.d.ts']),
 ]);

@@ -14,9 +14,9 @@ export function GuestGuard({ children }: AuthGuardProps) {
   const router = useRouter();
 
   useEffect(() => {
-    if (isAuthenticated()) {
-      router.replace('/');
-    }
+    if (isLoading()) return;
+
+    if (isAuthenticated()) router.replace('/');
   }, [status, router]);
 
   if (isLoading()) {
