@@ -6,6 +6,7 @@ const getUrl = (path: string) => `/${API_PREFIX}/${API_VERSION}/${path}`;
 export const API_ENDPOINTS = {
     AUTH: {
         LOGIN: getUrl('login'),
+        REGISTER: getUrl('register'),
         LOGOUT: getUrl('logout'),
         ME: getUrl('me'),
     },

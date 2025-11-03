@@ -1,10 +1,13 @@
-import { SimpleLayout } from '@/src/shared/ui/simple-layout';
-import { RegisterByEmailCard } from '@/src/features/register-by-email';
+import { SimpleLayout } from '@shared/ui/simple-layout';
+import { GuestGuard } from '@features/guards';
+import { RegisterForm } from '@features/auth';
 
 export function RegisterPage() {
-    return (
-        <SimpleLayout>
-            <RegisterByEmailCard />
-        </SimpleLayout>
-    )
+  return (
+    <GuestGuard>
+      <SimpleLayout>
+        <RegisterForm />
+      </SimpleLayout>
+    </GuestGuard>
+  );
 }
