@@ -10,6 +10,10 @@ export default {
         return httpClient.post(API_ENDPOINTS.AUTH.REGISTER, data);
     },
 
+    forgotPassword<T>(data: T) {
+        return httpClient.post(API_ENDPOINTS.AUTH.PASSWORD_FORGOT, data);
+    },
+
     logout() {
         return httpClient.post(API_ENDPOINTS.AUTH.LOGOUT);
     },

@@ -7,6 +7,7 @@ export const API_ENDPOINTS = {
     AUTH: {
         LOGIN: getUrl('login'),
         REGISTER: getUrl('register'),
+        PASSWORD_FORGOT: getUrl('password/forgot'),
         LOGOUT: getUrl('logout'),
         ME: getUrl('me'),
     },

@@ -1,1 +1,0 @@
-export { PasswordForgotCard } from './ui/password-forgot-card';
