@@ -28,13 +28,17 @@ export function useRegister() {
             router.push('/login');
         } else {
             toast.error(result?.data?.message);
-            console.error(result?.data?.message);
             const errors = result?.data?.errors || [];
 
             for (const key in errors) {
                 const message = errors[key]?.[0] || '';
-                console.log(message);
-                if (message) setError(key, message);
+
+                if (message) {
+                    setError(key as keyof RegisterFormValues, {
+                        type: 'server',
+                        message
+                    });
+                }
             }
         }
     });
