@@ -14,6 +14,11 @@ export default {
         return httpClient.post(API_ENDPOINTS.AUTH.PASSWORD_FORGOT, data);
     },
 
+    resetPassword<T>(data: T & { token: string }) {
+        console.log('-=----', API_ENDPOINTS.AUTH.PASSWORD_RESET(data.token));
+        return httpClient.post(API_ENDPOINTS.AUTH.PASSWORD_RESET(data.token), data);
+    },
+
     logout() {
         return httpClient.post(API_ENDPOINTS.AUTH.LOGOUT);
     },

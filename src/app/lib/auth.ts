@@ -35,7 +35,7 @@ export const authConfig = {
         });
         const { data } = response;
 
-        if (response.status !== 200) throw new Error(data.data.message);
+        if (response.status !== 200) throw new Error(data.message);
 
         jwtData.accessToken = data.data.access_token;
         jwtData.refreshToken = getCookieValue(response.headers['set-cookie'], 'refresh_token');
