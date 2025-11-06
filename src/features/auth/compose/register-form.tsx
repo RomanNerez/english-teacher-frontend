@@ -6,6 +6,7 @@ import { Link } from '@mui/material';
 import { Field } from '@shared/ui/hook-form';
 import { AuthCard } from '../ui/auth-card';
 import { useRegister } from '../model/register.model';
+import { PasswordStrengthMeter } from './password-strength-meter';
 
 export function RegisterForm() {
   const { onSubmit, methods } = useRegister();
@@ -17,6 +18,7 @@ export function RegisterForm() {
         <Field.Text name='last_name' label='Призвіще' />
         <Field.Text name='email' label='Email' type='email' />
         <Field.Password name='password' label='Пароль' />
+        <PasswordStrengthMeter />
         <Field.Password name='confirm_password' label='Підтвердити Пароль' />
         <Button type='submit'>Зареєструватися</Button>
         <Link href='/login' textAlign='center'>
