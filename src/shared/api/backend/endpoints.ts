@@ -9,6 +9,7 @@ export const API_ENDPOINTS = {
         REGISTER: getUrl('register'),
         PASSWORD_FORGOT: getUrl('password/forgot'),
         PASSWORD_RESET: (token: string) => getUrl(`password/reset/${token}`),
+        PASSWORD_RESET_CHECK: (token: string) => getUrl(`password/reset/${token}/check`),
         LOGOUT: getUrl('logout'),
         ME: getUrl('me'),
     },

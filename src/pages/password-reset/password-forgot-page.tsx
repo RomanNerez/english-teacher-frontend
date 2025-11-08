@@ -1,5 +1,7 @@
-import { SimpleLayout } from '@/src/shared/ui/simple-layout';
+import { BackendService } from '@shared/api/backend';
+import { SimpleLayout } from '@shared/ui/simple-layout';
 import { PasswordResetForm } from '@features/auth';
+import { redirect } from 'next/navigation';
 
 type ResetPageProps = {
   params: Promise<{ token: string }>;
@@ -9,7 +11,10 @@ type ResetPageProps = {
 export async function PasswordResetPage(props: ResetPageProps) {
   const params = await props.params;
   const searchParams = await props.searchParams;
-  console.log(params, searchParams);
+
+  const res = await BackendService.checkResetPasswordToken(params.token, searchParams);
+
+  if (res.status === 404) redirect('/404');
 
   return (
     <SimpleLayout>
