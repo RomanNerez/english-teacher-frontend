@@ -2,6 +2,7 @@ import { BackendService } from '@shared/api/backend';
 import { SimpleLayout } from '@shared/ui/simple-layout';
 import { PasswordResetForm } from '@features/auth';
 import { redirect } from 'next/navigation';
+import { Alert } from '@mui/material';
 
 type ResetPageProps = {
   params: Promise<{ token: string }>;
@@ -18,6 +19,7 @@ export async function PasswordResetPage(props: ResetPageProps) {
 
   return (
     <SimpleLayout>
+      <Alert>Test</Alert>
       <PasswordResetForm token={params.token} email={searchParams.email} />
     </SimpleLayout>
   );
