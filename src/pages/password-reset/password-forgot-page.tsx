@@ -19,7 +19,7 @@ export async function PasswordResetPage(props: ResetPageProps) {
 
   return (
     <SimpleLayout>
-      <Alert>Test</Alert>
+      <Alert>Welcome to App</Alert>
       <PasswordResetForm token={params.token} email={searchParams.email} />
     </SimpleLayout>
   );
