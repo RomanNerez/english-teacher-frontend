@@ -1,0 +1,1 @@
+export { ModuleEditorPage } from './module-editor'

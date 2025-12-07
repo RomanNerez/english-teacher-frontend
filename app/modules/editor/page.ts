@@ -1,0 +1,1 @@
+export { ModuleEditorPage as default } from '@pages/module-editor';
